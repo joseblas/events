@@ -59,6 +59,12 @@ public class MatchTest {
         assertThat("Has event", match.getAllEvent().size(), is(28));
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGetAllEvents_should_not_be_modifiable() {
+        playMatch1(match);
+        match.getAllEvent().add(new MatchEvent("0x12b0d8ea").apply().get());
+    }
+
     @Test
     public void testGetLastEvent() {
         playMatch1(match);
@@ -71,7 +77,7 @@ public class MatchTest {
         playMatch1(match);
 
         assertThat("Gets one event only", match.getLastNEvents(1).size(), is(1));
-        assertThat("Has event", match.getLastNEvents(1), is(Arrays.asList( new MatchEvent("0x12b0d8ea").apply().get())));
+        assertThat("Has event", match.getLastNEvents(1), is(Arrays.asList(new MatchEvent("0x12b0d8ea").apply().get())));
     }
 
     @Test
@@ -83,6 +89,13 @@ public class MatchTest {
                 new MatchEvent("0x1228c8ea").apply().get(),
                 new MatchEvent("0x12b0d8ea").apply().get()))
         );
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGetNEvent_2_should_not_be_modifiable() {
+        playMatch1(match);
+        match.getLastNEvents(2).add(new MatchEvent("0x12b0d8ea").apply().get());
+
     }
 
     @Test(expected = IllegalArgumentException.class)

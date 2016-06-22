@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 
 public class Match {
     private final static Logger logger = LoggerFactory.getLogger(Match.class);
     final private List<MatchEvent> events;
+
     private Integer errors = 0;
 
     public Match() {
@@ -50,17 +52,19 @@ public class Match {
      * returns true if the sum of points is consistent with the latest event
      */
     public boolean isConsistent(MatchEvent e) {
-        if (events.isEmpty()) return true;
+        if (events.isEmpty()){
+            return true;
+        }
+
         MatchEvent last = getLastEvent();
         if (e.getWhoScored() == 1) {
             return last.getTeam1() + e.getPointsScored() == e.getTeam1();
-        } else { // 1
+        } else {
             return last.getTeam2() + e.getPointsScored() == e.getTeam2();
         }
 
     }
 
-    // test if this object can be modified
     public MatchEvent getLastEvent() {
         return events.get(events.size() - 1);
     }
@@ -73,6 +77,10 @@ public class Match {
         if( n < 0 || n > events.size())
             throw new IllegalArgumentException("out of bounds exception. Should be an element between 0 and "+events.size());
         return Collections.unmodifiableList(events.subList(events.size() - n , events.size() ));
+    }
+
+    public Stream<MatchEvent> stream(){
+        return events.stream();
     }
 
     public int errors(){
