@@ -95,10 +95,10 @@ public class MatchEvent {
 
     private enum BitHelper {
         POINTS_SCORED(0b11, 0),
-        WHO_SCORED(0b1_00, 2),
-        TEAM2(0b11111111_0_00, 3),
-        TEAM1(0b11111111_00000000_0_00, 11),
-        TIMESTAMP(0b111111111111_00000000_00000000_0_00, 19);
+        WHO_SCORED(0b100, 2),
+        TEAM2(0b11111111000, 3),
+        TEAM1(0b1111111100000000000, 11),
+        TIMESTAMP(0b1111111111110000000000000000000, 19);
 
         int mask;
         int shift;

@@ -1,13 +1,14 @@
 
 # Implementation.
 
- This solution will be based on Immutable data, so each message will be considered as an immutable event. All the events
- will be stored and will be queryable.
+ This solution is based on immutable data. All the events will be stored and will be queryable.
 
  All the messages will be mapped to a data structure: MatchEvent.
 
- When is mentioned that the data has to be sent downstream as soon as possible there is a method provided 'stream()' that return the stream for the the EventStore.
- Another opton would be a RxJava stream, but as is not used in the exercise I have not implemented it.
+ If a message is incorrect will not be stored.
+
+ There is a method 'stream' that makes available all the store in a stream. In order to make all the date available I'd implemented a Rx Stream.
+
 
 # Asssumsions about inconsistency
 
