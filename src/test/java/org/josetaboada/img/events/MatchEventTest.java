@@ -25,7 +25,7 @@ public class MatchEventTest {
     }
 
     @Test
-    public void testConstructor_2(){
+    public void eventCreationSuccess(){
 //        If 15 seconds later, Team 2 replies with 3 points, then the following will be received:
         Optional<MatchEvent> event = new MatchEvent("0xf81016").apply();
         System.out.println(event);
@@ -37,19 +37,19 @@ public class MatchEventTest {
     }
 
     @Test
-    public void testConstructorWithNull(){
+    public void eventCreationFailsWithOptional(){
         Optional<MatchEvent> event = new MatchEvent(null).apply();
         assertThat(event.isPresent(), is(false));
     }
 
     @Test
-    public void testConstructorWithEmptyString(){
+    public void eventCreationFailsWithEmptyString(){
         Optional<MatchEvent> event = new MatchEvent("").apply();
         assertThat(event.isPresent(), is(false));
     }
 
     @Test
-    public void testConstructorWithErrors(){
+    public void eventCreationFailsWithErrors(){
         Optional<MatchEvent> event = new MatchEvent("f81016").apply();
         assertThat(event.isPresent(), is(false));
     }

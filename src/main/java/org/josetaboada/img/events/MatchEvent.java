@@ -31,10 +31,10 @@ public class MatchEvent {
             team2 = BitHelper.TEAM2.applyTo(data);
             timestamp = BitHelper.TIMESTAMP.applyTo(data);
 
-            return Optional.<MatchEvent>of(this);
+            return Optional.of(this);
 
         }catch(NumberFormatException | NullPointerException e){
-            logger.warn( String.format(" Error building an event %s with error %s",line,  e.getMessage()));
+            logger.warn( String.format(" Error building an event '%s' with error %s",line,  e.getMessage()));
             return Optional.empty();
         }
     }

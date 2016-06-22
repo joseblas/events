@@ -21,32 +21,27 @@ public class Match {
         events = new ArrayList<>();
     }
 
-    public void push(Optional<MatchEvent> event) {
+    public void add(Optional<MatchEvent> event) {
         if(event.isPresent()) {
-            if (isTimelyConsistent(event.get())) {
-                logger.warn("Duplicated/inconsistent event: " + event);
+            MatchEvent e = event.get();
+
+            if (isTimelyConsistent(e)) {
+                logger.warn("Timely inconsistent event: " + event);
                 errors++;
                 return;
             }
-            addElement(event.get());
+            if (!isConsistent(e)) {
+                logger.warn("Event inconsistent relative to points dropped: " + e);
+                errors++;
+                return;
+            }
+
+            events.add(e);
+
+            logger.trace("new event: " + e);
         }
     }
 
-    private boolean isTimelyConsistent(MatchEvent event) {
-        return events.stream().anyMatch(item -> item.getTimestamp() >= event.getTimestamp());
-    }
-
-    private void addElement(MatchEvent e) {
-        if (!isConsistent(e)) {
-            logger.warn("Event inconsistent in totals dropped: " + e);
-            errors++;
-            return;
-        }
-
-        events.add(e);
-
-        logger.info("Added new event: " + e.toString());
-    }
 
     /**
      * returns true if the sum of points is consistent with the latest event
@@ -58,9 +53,9 @@ public class Match {
 
         MatchEvent last = getLastEvent();
         if (e.getWhoScored() == 1) {
-            return last.getTeam1() + e.getPointsScored() == e.getTeam1();
+            return last.getTeam1() + e.getPointsScored() == e.getTeam1() && last.getTeam2() == last.getTeam2();
         } else {
-            return last.getTeam2() + e.getPointsScored() == e.getTeam2();
+            return last.getTeam2() + e.getPointsScored() == e.getTeam2() && last.getTeam1() == last.getTeam1();
         }
 
     }
@@ -77,6 +72,10 @@ public class Match {
         if( n < 0 || n > events.size())
             throw new IllegalArgumentException("out of bounds exception. Should be an element between 0 and "+events.size());
         return Collections.unmodifiableList(events.subList(events.size() - n , events.size() ));
+    }
+
+    private boolean isTimelyConsistent(MatchEvent event) {
+        return events.stream().anyMatch(item -> item.getTimestamp() >= event.getTimestamp());
     }
 
     public Stream<MatchEvent> stream(){
